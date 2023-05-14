@@ -1,0 +1,21 @@
+{
+  "name": "positivity-bot",
+  "version": "1.0.0",
+  "description": "A discord bot that spreads positivity",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@replit/database": "^2.0.3",
+    "@types/node": "^18.0.6",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-fetch": "^3.2.6"
+  }
+}
