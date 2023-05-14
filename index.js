@@ -126,6 +126,17 @@ client.on("messageCreate", async (message) => {
     });
   }
 
+  if (message.content.startsWith("$help")) {
+    message.channel.send(
+      `\n$inspire - Get a random inspirational quote
+\n$new - Add a new encouraging message
+\n$del - Delete an encouraging message
+\n$list - List all the encouraging messages
+\n$responding - Toggle responding to sad words
+\n$help - Show this message`
+    );
+  }
+
   if (message.content.startsWith("$responding")) {
     value = message.content.split("$responding ")[1];
     if (value && value.toLowerCase() === "true") {
