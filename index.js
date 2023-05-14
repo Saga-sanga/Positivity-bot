@@ -1,20 +1,30 @@
 require("dotenv").config();
 const { Client, GatewayIntentBits } = require("discord.js");
-const mySecret = process.env['TOKEN'];
+const mySecret = process.env["TOKEN"];
 const keepAlive = require("./server");
 const Database = require("@replit/database");
+const dbURL = process.env.REPLIT_DB_URL;
 
-const db = new Database();
+const db = new Database(dbURL);
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-  ]
+  ],
 });
 
-const sadWords = ["sad", "depressed", "depressing", "frustrated", "unhappy", "angry", "anxious", "lonely"];
+const sadWords = [
+  "sad",
+  "depressed",
+  "depressing",
+  "frustrated",
+  "unhappy",
+  "angry",
+  "anxious",
+  "lonely",
+];
 
 const starterEncouragements = [
   "Cheer up!",
@@ -37,7 +47,7 @@ db.get("responding").then((value) => {
   }
 });
 
-const myUrl = "https://zenquotes.io/api/random"
+const myUrl = "https://zenquotes.io/api/random";
 
 async function getQuote() {
   const res = await fetch(myUrl);
@@ -47,19 +57,19 @@ async function getQuote() {
 
 function updateEncouragements(encouragingMessage) {
   db.get("encouragements").then((encouragements) => {
-    encouragements.push(encouragingMessage)
-    db.set("encouragements", encouragements)
+    encouragements.push(encouragingMessage);
+    db.set("encouragements", encouragements);
   });
 }
 
 async function deleteEncouragements(index) {
   return await db.get("encouragements").then((encouragements) => {
-    let deletedMsg
+    let deletedMsg;
     if (encouragements.length > index) {
-      deletedMsg = encouragements.splice(index, 1)
-      db.set("encouragements", encouragements)
+      deletedMsg = encouragements.splice(index, 1);
+      db.set("encouragements", encouragements);
     }
-    return deletedMsg
+    return deletedMsg;
   });
 }
 
@@ -76,8 +86,8 @@ client.on("messageCreate", async (message) => {
 
   db.get("responding").then((responding) => {
     console.log("responding:", responding);
-    if(!responding){
-      db.set("responding", true)
+    if (!responding) {
+      db.set("responding", true);
     }
     if (responding && sadWords.some((word) => message.content.includes(word))) {
       console.log("message contains sad word:", message.content);
@@ -94,15 +104,15 @@ client.on("messageCreate", async (message) => {
   });
 
   if (message.content.startsWith("$new")) {
-    encouragingMessage = message.content.split("$new ")[1]
-    updateEncouragements(encouragingMessage)
-    message.channel.send("New encouraging message added.")
+    encouragingMessage = message.content.split("$new ")[1];
+    updateEncouragements(encouragingMessage);
+    message.channel.send("New encouraging message added.");
   }
 
   if (message.content.startsWith("$del")) {
-    index = parseInt(message.content.split("$del ")[1])
-    const deletedMessage = await deleteEncouragements(index)
-    message.channel.send(`Encouraging message deleted: \n "${deletedMessage}"`)
+    index = parseInt(message.content.split("$del ")[1]);
+    const deletedMessage = await deleteEncouragements(index);
+    message.channel.send(`Encouraging message deleted: \n "${deletedMessage}"`);
   }
 
   if (message.content.startsWith("$list")) {
@@ -117,16 +127,15 @@ client.on("messageCreate", async (message) => {
   }
 
   if (message.content.startsWith("$responding")) {
-    value = message.content.split("$responding ")[1]
+    value = message.content.split("$responding ")[1];
     if (value && value.toLowerCase() === "true") {
-      db.set("responding", true)
-      message.channel.send("Responding is On")
+      db.set("responding", true);
+      message.channel.send("Responding is On");
     } else {
-      db.set("responding", false)
-      message.channel.send("Responding is Off")
+      db.set("responding", false);
+      message.channel.send("Responding is Off");
     }
   }
-
 });
 
 keepAlive();
