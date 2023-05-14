@@ -6,6 +6,7 @@ A discord bot that spreads positivity in your channel. It tracks negative words 
 - $new [Your quote]
 - $del [index No]
 - $list
+- $help
 
 ## Useful links
 - [Discord Guide](https://discord.com/developers/docs/getting-started)
