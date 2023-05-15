@@ -1,4 +1,5 @@
-const express = require("express");
+// const express = require("express");
+import express from "express";
 const server = express();
 const port = 3000;
 
@@ -12,4 +13,4 @@ function keepAlive() {
   });
 }
 
-module.exports = keepAlive;
+export default keepAlive;

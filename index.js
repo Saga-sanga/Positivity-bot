@@ -1,8 +1,13 @@
-require("dotenv").config();
-const { Client, GatewayIntentBits } = require("discord.js");
+import dotenv from "dotenv";
+dotenv.config();
+// const { Client, GatewayIntentBits } = require("discord.js");
+import { Client, GatewayIntentBits } from "discord.js";
+// const keepAlive = require("./server");
+import keepAlive from "./server.js";
+import Database from "@replit/database";
+// const Database = require("@replit/database");
+import fetch from "node-fetch";
 const mySecret = process.env["TOKEN"];
-const keepAlive = require("./server");
-const Database = require("@replit/database");
 const dbURL = process.env.REPLIT_DB_URL;
 
 const db = new Database(dbURL);
@@ -110,7 +115,7 @@ client.on("messageCreate", async (message) => {
   }
 
   if (message.content.startsWith("$del")) {
-    index = parseInt(message.content.split("$del ")[1]);
+    const index = parseInt(message.content.split("$del ")[1]);
     const deletedMessage = await deleteEncouragements(index);
     message.channel.send(`Encouraging message deleted: \n "${deletedMessage}"`);
   }
@@ -129,11 +134,11 @@ client.on("messageCreate", async (message) => {
   if (message.content.startsWith("$help")) {
     message.channel.send(
       `\n$inspire - Get a random inspirational quote
-\n$new - Add a new encouraging message
-\n$del - Delete an encouraging message
-\n$list - List all the encouraging messages
-\n$responding - Toggle responding to sad words
-\n$help - Show this message`
+$new - Add a new encouraging message
+$del - Delete an encouraging message
+$list - List all the encouraging messages
+$responding - Toggle responding to sad words
+$help - Show this message`
     );
   }
 
